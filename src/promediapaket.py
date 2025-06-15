@@ -181,10 +181,7 @@ class ProMediaPaket:
         """
         audio_path = Path(audio_path)
         audio_filepath = (self.tmp_path / "audios" / audio_path.name)
-        if audio_filepath.exists():
-            log("INFO", f"Audio file already exists. Skipping. {audio_filepath}")
-            return
-
+        audio_filepath.unlink(missing_ok=True)
         audio_filepath.symlink_to(audio_path.absolute())
         self.metadata.audio_filepaths.append(audio_path.name)
 
@@ -196,10 +193,7 @@ class ProMediaPaket:
         """
         subtitle_path = Path(subtitle_path)
         subtitle_filepath = (self.tmp_path / "subtitles" / subtitle_path.name)
-        if subtitle_filepath.exists():
-            log("INFO", f"Subtitle file already exists. Skipping. {subtitle_filepath}")
-            return
-
+        subtitle_filepath.unlink(missing_ok=True)
         subtitle_filepath.symlink_to(subtitle_path.absolute())
         self.metadata.subtitle_filepaths.append(subtitle_path.name)
 
