@@ -6,9 +6,9 @@ from pathlib import Path
 from zipfile import ZipFile, BadZipFile
 from typing import Self
 
-from lib.ffmpeg import check_for_errors
-from lib.zip import ZipMount
-from lib.utils import log
+from ffmpeg import check_for_errors
+from zip import ZipMount
+from utils import log
 
 
 def test_zip(zip_path: PathLike | str):

@@ -4,7 +4,7 @@ from pathlib import Path
 from os import PathLike
 from json import loads
 
-from lib.utils import log
+from utils import log
 
 
 def ffprobe(file: PathLike | str) -> dict:
