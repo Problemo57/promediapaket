@@ -169,6 +169,7 @@ class ProMediaPaket:
         :return:
         """
         video_path = Path(video_path)
+        (self.tmp_path / video_path.name).unlink(missing_ok=True)
         (self.tmp_path / video_path.name).symlink_to(video_path.absolute())
         self.metadata.video_filepath = video_path.name
 
