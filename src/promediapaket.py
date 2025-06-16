@@ -33,8 +33,8 @@ class VideoTypes:
 class Metadata:
     version: int = 1  # Version der Datei
     video_filepath: str = "video.mkv"  # Relativer Pfad zur Videodatei
-    audio_filepaths: list[str] = None  # Liste der Ton Sprachen. Muss mit den tatsächlich Sprachen im audios ordner übereinstimmen.
-    subtitle_filepaths: list[str] = None  # Liste der Untertitle Sprachen. Muss mit den tatsächlich Sprachen im subtitles ordner übereinstimmen.
+    audio_filepaths: set[str] = None  # Liste der Ton Sprachen. Muss mit den tatsächlich Sprachen im audios ordner übereinstimmen.
+    subtitle_filepaths: set[str] = None  # Liste der Untertitle Sprachen. Muss mit den tatsächlich Sprachen im subtitles ordner übereinstimmen.
 
     provider: str | None = None  # Quelle des Videos. None für unbekannt/anders
     provider_id: str | None = None  # ID des Videos beim Provider selber.
@@ -49,10 +49,10 @@ class Metadata:
 
     def __init__(self):
         if self.audio_filepaths is None:
-            self.audio_filepaths = []
+            self.audio_filepaths = set()
 
         if self.subtitle_filepaths is None:
-            self.subtitle_filepaths = []
+            self.subtitle_filepaths = set()
 
     @property
     def valid(self) -> bool:
@@ -62,10 +62,10 @@ class Metadata:
         if not self.video_filepath:
             return False
 
-        if not isinstance(self.audio_filepaths, list):
+        if not isinstance(self.audio_filepaths, set):
             return False
 
-        if not isinstance(self.subtitle_filepaths, list):
+        if not isinstance(self.subtitle_filepaths, set):
             return False
 
         if not isinstance(self.provider, str) and self.provider is not None:
@@ -97,7 +97,10 @@ class Metadata:
 
     @property
     def json(self) -> str:
-        return dumps(self.dict)
+        data = self.dict
+        data['audio_filepaths'] = list(data['audio_filepaths'])
+        data['subtitle_filepaths'] = list(data['subtitle_filepaths'])
+        return dumps(data)
 
 
 @dataclass
@@ -183,7 +186,7 @@ class ProMediaPaket:
         audio_filepath = (self.tmp_path / "audios" / audio_path.name)
         audio_filepath.unlink(missing_ok=True)
         audio_filepath.symlink_to(audio_path.absolute())
-        self.metadata.audio_filepaths.append(audio_path.name)
+        self.metadata.audio_filepaths.add(audio_path.name)
 
     def add_subtitle(self, subtitle_path: PathLike | str) -> None:
         """
@@ -195,7 +198,7 @@ class ProMediaPaket:
         subtitle_filepath = (self.tmp_path / "subtitles" / subtitle_path.name)
         subtitle_filepath.unlink(missing_ok=True)
         subtitle_filepath.symlink_to(subtitle_path.absolute())
-        self.metadata.subtitle_filepaths.append(subtitle_path.name)
+        self.metadata.subtitle_filepaths.add(subtitle_path.name)
 
     def set_provider(self, provider: str | None, provider_id: str | None) -> None:
         self.metadata.provider = provider
@@ -335,6 +338,8 @@ class ProMediaPaket:
         if metadata_json['type'] != self.metadata.type:
             self.change_metadata_type(metadata_json['type'])
         self.metadata.__dict__ = metadata_json
+        self.metadata.audio_filepaths = set(self.metadata.audio_filepaths)
+        self.metadata.subtitle_filepaths = set(self.metadata.subtitle_filepaths)
 
         return self
 
@@ -357,6 +362,8 @@ class ProMediaPaket:
         if metadata_json['type'] != self.metadata.type:
             self.change_metadata_type(metadata_json['type'])
         self.metadata.__dict__ = metadata_json
+        self.metadata.audio_filepaths = set(self.metadata.audio_filepaths)
+        self.metadata.subtitle_filepaths = set(self.metadata.subtitle_filepaths)
 
         return self
 
@@ -372,6 +379,8 @@ class ProMediaPaket:
         if metadata_json['type'] != self.metadata.type:
             self.change_metadata_type(metadata_json['type'])
         self.metadata.__dict__ = metadata_json
+        self.metadata.audio_filepaths = set(self.metadata.audio_filepaths)
+        self.metadata.subtitle_filepaths = set(self.metadata.subtitle_filepaths)
 
         return self.metadata
 

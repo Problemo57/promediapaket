@@ -9,6 +9,8 @@ if __name__ == '__main__':
 
     print("File: ", argv[1])
     pmp_metadata = ProMediaPaket.metadata(argv[1])
+    print("Metadata valid: " + str(pmp_metadata.valid))
+
     print("Version: ", pmp_metadata.version)
     print("Video-Pfad: ", pmp_metadata.video_filepath)
     print("Audio-Pfade: ", pmp_metadata.audio_filepaths)
