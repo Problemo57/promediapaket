@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-from os import PathLike
 
-from promediapaket import ProMediaPaket
+from .promediapaket import ProMediaPaket
+
+from os import PathLike
 from subprocess import run
 from sys import argv
 

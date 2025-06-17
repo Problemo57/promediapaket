@@ -1,6 +1,6 @@
 from sys import argv
 
-from promediapaket import ProMediaPaket, EpisodeMetadata
+from .promediapaket import ProMediaPaket, EpisodeMetadata
 
 if __name__ == '__main__':
     if len(argv) != 2:

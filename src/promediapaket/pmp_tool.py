@@ -1,6 +1,6 @@
 from sys import argv
 
-from promediapaket import ProMediaPaket
+from .promediapaket import ProMediaPaket
 
 
 if __name__ == '__main__':
