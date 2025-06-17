@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "promediapaket"
-version = "0.0.8"
+version = "0.0.9"
 authors = [
   { name="Jan Erik Mühlwald", email="problemo@problemo.pro" },
 ]
